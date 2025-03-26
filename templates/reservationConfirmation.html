@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Reservation Confirmation</title>
+</head>
+<body>
+    <h1>Reservation Confirmation</h1>
+    <p>Reservation ID: {{ reservation.id }}</p>
+    <p>Flight Number: {{ flight.flight_number }}</p>
+    <p>Departure City: {{ flight.departure_city }}</p>
+    <p>Arrival City: {{ flight.arrival_city }}</p>
+    <p>Date of Departure: {{ flight.date_of_departure }}</p>
+    <p>Estimated Departure Time: {{ flight.estimated_departure_time }}</p>
+    <p>Passenger Name: {{ passenger.first_name }} {{ passenger.last_name }}</p>
+    <p>Email: {{ passenger.email }}</p>
+    <p>Amount Paid: ${{ "%.2f"|format(reservation.amount) }}</p>
+    <p>Card Number: {{ reservation.card_number }}</p>
+
+    {% if success is not defined %}
+        <p>Please confirm reservation to pay the ticket.</p>
+    {% elif success %}
+        <p>Payment processed successfully! You can now check in.</p>
+        <a href="{{ BASE_URL }}/checkIn?reservation_id={{ reservation.id }}">Continue to Check-In</a>
+    {% else %}
+        <p>Payment failed. Please try again.</p>
+    {% endif %}
+
+    {% if show_confirm_button %}
+        <form action="{{ BASE_URL }}/completeReservation" method="POST" style="margin-top: 10px;">
+            <input type="hidden" name="reservation_id" value="{{ reservation.id }}">
+            <button type="submit">Confirm Reservation</button>
+        </form>
+    {% endif %}
+</body>
+</html>

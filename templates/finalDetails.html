@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Final Reservation Details</title>
+</head>
+<body>
+    <h1>Final Reservation Details</h1>
+
+    <h2>Flight Details</h2>
+    <p><strong>Flight Number:</strong> {{ reservation.flight.flight_number }}</p>
+    <p><strong>Operating Airlines:</strong> {{ reservation.flight.operating_airlines }}</p>
+    <p><strong>Departure City:</strong> {{ reservation.flight.departure_city }}</p>
+    <p><strong>Arrival City:</strong> {{ reservation.flight.arrival_city }}</p>
+    <p><strong>Date of Departure:</strong> {{ reservation.flight.date_of_departure }}</p>
+    <p><strong>Estimated Departure Time:</strong> {{ reservation.flight.estimated_departure_time }}</p>
+
+    <h2>Passenger Details</h2>
+    <p><strong>First Name:</strong> {{ reservation.passenger.first_name }}</p>
+    <p><strong>Last Name:</strong> {{ reservation.passenger.last_name }}</p>
+    <p><strong>Email:</strong> {{ reservation.passenger.email }}</p>
+    <p><strong>Phone:</strong> {{ reservation.passenger.phone }}</p>
+
+    <h2>Reservation Details</h2>
+    <p><strong>Reservation ID:</strong> {{ reservation.id }}</p>
+    <p><strong>Number of Bags:</strong> {{ reservation.number_of_bags }}</p>
+    <p><strong>Checked In:</strong> {{ 'Yes' if reservation.checked_in else 'No' }}</p>
+    <p><strong>Amount Paid:</strong> ${{ "%.2f"|format(reservation.amount) }}</p>
+</body>
+</html>

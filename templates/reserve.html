@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Reserve Flight</title>
+</head>
+<body>
+    <h1>Reserve Flight</h1>
+    <p>Flight Number: {{ flight.flight_number }}</p>
+    <p>Airline: {{ flight.operating_airlines }}</p>
+    <p>Departure City: {{ flight.departure_city }}</p>
+    <p>Arrival City: {{ flight.arrival_city }}</p>
+    <p>Departure Date: {{ flight.date_of_departure }}</p>
+    <p>Price: ${{ "%.2f"|format(flight.price) }}</p>
+
+    <form action="{{ BASE_URL }}/createReservation" method="POST">
+        <input type="hidden" name="flight_id" value="{{ flight.id }}">
+        <h3>Passenger Information</h3>
+        <label for="first_name">First Name:</label>
+        <input type="text" id="first_name" name="first_name" required>
+        <br>
+        <label for="last_name">Last Name:</label>
+        <input type="text" id="last_name" name="last_name" required>
+        <br>
+        <label for="middle_name">Middle Name:</label>
+        <input type="text" id="middle_name" name="middle_name">
+        <br>
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required>
+        <br>
+        <label for="phone">Phone:</label>
+        <input type="text" id="phone" name="phone" required>
+        <br>
+        <h3>Payment Information</h3>
+        <label for="card_number">Card Number:</label>
+        <input type="text" id="card_number" name="card_number" required>
+        <br>
+        <label for="amount">Amount:</label>
+        <input type="number" id="amount" name="amount" required>
+        <br>
+        <button type="submit">Reserve</button>
+    </form>
+</body>
+</html>

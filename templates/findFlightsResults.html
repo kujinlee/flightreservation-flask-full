@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flight Search Results</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+    </style>
+</head>
+<body>
+    <h1>Flight Search Results</h1>
+    {% if flights %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Flight Number</th>
+                    <th>Operating Airlines</th>
+                    <th>Departure City</th>
+                    <th>Arrival City</th>
+                    <th>Date of Departure</th>
+                    <th>Estimated Departure Time</th>
+                    <th>Price</th>
+                    <th>Action</th> <!-- Added Action column -->
+                </tr>
+            </thead>
+            <tbody>
+                {% for flight in flights %}
+                <tr>
+                    <td>{{ flight.flight_number }}</td>
+                    <td>{{ flight.operating_airlines }}</td>
+                    <td>{{ flight.departure_city }}</td>
+                    <td>{{ flight.arrival_city }}</td>
+                    <td>{{ flight.date_of_departure }}</td>
+                    <td>{{ flight.estimated_departure_time }}</td>
+                    <td>${{ "%.2f"|format(flight.price) }}</td>
+                    <td><a href="{{ BASE_URL }}/reserve?flight_id={{ flight.id }}">Reserve</a></td> <!-- Added Reserve link -->
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No flights found for the given criteria.</p>
+    {% endif %}
+</body>
+</html>
