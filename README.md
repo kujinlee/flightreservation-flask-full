@@ -175,6 +175,80 @@ This project uses **Swagger** (OpenAPI) to document and test the API endpoints.
 
 ---
 
+## Mock Server vs Swagger
+
+The Flight Reservation Flask Application provides two tools for testing and development: `mock_server.py` and `swagger`. Below is a comparison of their use cases:
+
+| **Scenario**                              | **Use `mock_server.py`** | **Use `swagger`** |
+|-------------------------------------------|--------------------------|-------------------|
+| Frontend development without a backend    | ✅                       | ❌                |
+| Testing real backend endpoints            | ❌                       | ✅                |
+| API documentation                         | ❌                       | ✅                |
+| Simulating backend behavior for prototyping | ✅                       | ❌                |
+
+### Description
+
+1. **`mock_server.py`**:
+   - A standalone mock server that simulates the backend behavior with hardcoded responses.
+   - Useful for frontend developers or prototyping when the real backend is unavailable.
+   - Does not require a database or the actual Flask application to be running.
+
+2. **`swagger`**:
+   - Provides API documentation and a testing interface for the real backend endpoints.
+   - Dynamically generates an OpenAPI (Swagger) specification for the Flask application.
+   - Useful for documenting and testing the actual API endpoints.
+
+---
+
+## Using the Mock Server
+
+The `mock_server.py` is a standalone mock server that simulates the backend behavior with hardcoded responses. It is useful for frontend development or prototyping when the real backend is unavailable.
+
+### Steps to Use the Mock Server
+
+1. **Start the Mock Server**:
+   - Run the `mock_server.py` script:
+     ```bash
+     python /Users/kujinlee/code/copilotforjava/flightreservation-flask-full/tests/mock_server.py
+     ```
+   - By default, the mock server runs on port `5002`.
+
+2. **Access the Mock Endpoints**:
+   - Open your browser or use tools like Postman or cURL to test the mock endpoints. For example:
+     - **Search for Flights**:
+       ```
+       http://127.0.0.1:5002/flightreservation-flask-full/findFlights
+       ```
+     - **Reserve a Flight**:
+       ```
+       http://127.0.0.1:5002/flightreservation-flask-full/reserve
+       ```
+     - **Create a Reservation**:
+       ```
+       http://127.0.0.1:5002/flightreservation-flask-full/createReservation
+       ```
+     - **Check-In**:
+       ```
+       http://127.0.0.1:5002/flightreservation-flask-full/checkIn
+       ```
+     - **Complete Check-In**:
+       ```
+       http://127.0.0.1:5002/flightreservation-flask-full/completeCheckIn
+       ```
+
+3. **Test the Mock Endpoints**:
+   - Use Postman, cURL, or a browser to interact with the mock server. For example:
+     ```bash
+     curl -X GET http://127.0.0.1:5002/flightreservation-flask-full/findFlights
+     ```
+
+### Notes
+- The mock server runs independently of the real Flask application.
+- It uses hardcoded responses and does not interact with a database.
+- Ensure the port (`5002`) does not conflict with other running services.
+
+---
+
 ## Running the Application
 
 ### Prerequisites
