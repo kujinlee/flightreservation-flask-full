@@ -95,3 +95,6 @@ venv.bak/
 
 # SSL/TLS certificates
 certs/
+
+# Exclude MySQL data directory
+mysql-data/

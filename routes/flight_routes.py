@@ -24,8 +24,8 @@ def get_all_flights():
     """
     Retrieve all flights from the database.
     """
-    with next(get_db()) as db:
-        flights = db.query(Flight).all()
+    with next(get_db()) as db:  # Get a database session
+        flights = db.query(Flight).all()  # Perform a query
         return jsonify([{
             "id": f.id,
             "flight_number": f.flight_number,

@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_DATABASE: ${DB_NAME}
+    ports:
+      - 3307:3306  # Map port 3307 on the host to port 3306 in the container
+    volumes:
+      - ./mysql-data:/var/lib/mysql
+      - ./sql-scripts:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 30s
+      retries: 20
+      timeout: 10s
+
+  flightreservation-flask:
+    build: .
+    ports:
+      - "5001:5001" # Map port 5001 on the host to port 5001 in the container
+    depends_on:
+      mysql:
+        condition: service_healthy
+    env_file:
+      - .env
+    volumes:
+      - ./certs:/usr/src/app/certs # Mount the certs directory

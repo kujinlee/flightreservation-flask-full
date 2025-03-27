@@ -4,6 +4,7 @@ Database configuration and initialization for the Flight Reservation Flask Appli
 
 import os
 import logging
+import time  # Add this import
 from dotenv import load_dotenv
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
@@ -28,15 +29,25 @@ def init_db():
     """
     Initialize the database by executing the schema SQL script.
     """
-    with engine.connect() as connection:
-        execute_sql_script(connection, "sql-scripts/1-schema.sql")  # Use utility function
+    retries = 5  # Number of retries
+    while retries > 0:
+        try:
+            with engine.connect() as connection:
+                execute_sql_script(connection, "sql-scripts/1-schema.sql")  # Use utility function
+                break  # Exit the loop if successful
+        except Exception as e:
+            logging.error("Database connection failed: %s. Retrying in 5 seconds...", e)
+            retries -= 1
+            time.sleep(5)  # Wait before retrying
+    if retries == 0:
+        raise Exception("Failed to connect to the database after multiple retries.")
 
 def get_db():
     """
     Dependency to get the database session.
     """
-    db = SessionLocal()
+    db = SessionLocal()  # Create a new database session
     try:
-        yield db
+        yield db  # Provide the session to the caller
     finally:
-        db.close()
+        db.close()  # Ensure the session is closed after use
