@@ -5,3 +5,5 @@ pymysql
 python-dotenv
 flask-sqlalchemy
 cryptography
+flask-swagger-ui
+requests

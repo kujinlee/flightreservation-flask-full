@@ -159,14 +159,19 @@ This project uses **Swagger** (OpenAPI) to document and test the API endpoints.
 
 ### Setting Up Swagger
 
-1. Install Swagger dependencies:
-   ```bash
-   pip install flask-swagger-ui flask-swagger
-   ```
+1. **Install Swagger Dependencies**:
+    Install the required packages for Swagger:
+    ```bash
+    pip install flask-swagger-ui
+    ```
 
-2. Access the Swagger UI at `{BASE_URL}/api-docs`.
+2. **Access the Swagger UI**:
+    Once the application is running, open your browser and navigate to:
+    [http://127.0.0.1:5001/flightreservation-flask-full/api-docs](http://127.0.0.1:5001/flightreservation-flask-full/api-docs)
 
-3. To add new routes, annotate them with Swagger comments in the route files.
+3. **Swagger JSON**:
+    The Swagger JSON specification is available at:
+    [http://127.0.0.1:5001/flightreservation-flask-full/swagger.json](http://127.0.0.1:5001/flightreservation-flask-full/swagger.json)
 
 ---
 
@@ -202,3 +207,70 @@ This project uses **Swagger** (OpenAPI) to document and test the API endpoints.
   <p><a href="{{ BASE_URL }}/findFlights">Search for Flights</a></p>
   ```
 - For production, ensure the `BASE_URL` is correctly set in the `.env` file to match the deployment path.
+
+---
+
+## Testing POST Endpoints
+
+You can test the `POST` endpoints using the following methods:
+
+### 1. **Using Postman**
+1. Open Postman and create a new request.
+2. Set the method to `POST` and enter the endpoint URL. For example:
+   ```
+   http://127.0.0.1:5002/flightreservation-flask-full/findFlights
+   ```
+3. Go to the **Body** tab and select **form-data** or **x-www-form-urlencoded**.
+4. Add the required fields. For example:
+   ```
+   departure: AUS
+   arrival: NYC
+   date_of_departure: 02/05/2024
+   ```
+5. Click **Send** to submit the request and view the response.
+
+---
+
+### 2. **Using cURL**
+1. Open a terminal.
+2. Use the following command to test a `POST` endpoint:
+   ```bash
+   curl -X POST http://127.0.0.1:5002/flightreservation-flask-full/findFlights \
+   -d "departure=AUS" \
+   -d "arrival=NYC" \
+   -d "date_of_departure=02/05/2024"
+   ```
+3. View the response in the terminal.
+
+---
+
+### 3. **Using Python**
+1. Use the provided `test_post.py` script to test the `POST` endpoints.
+2. Example script:
+   ```python
+   import requests
+
+   url = "http://127.0.0.1:5002/flightreservation-flask-full/findFlights"
+   data = {
+       "departure": "AUS",
+       "arrival": "NYC",
+       "date_of_departure": "02/05/2024"
+   }
+
+   response = requests.post(url, data=data)
+   print("Status Code:", response.status_code)
+   print("Response Body:", response.text)
+   ```
+3. Save the script and run it:
+   ```bash
+   python test_post.py
+   ```
+
+---
+
+### Available POST Endpoints
+- `POST /flightreservation-flask-full/findFlights`: Search for flights.
+- `POST /flightreservation-flask-full/createReservation`: Create a new reservation.
+- `POST /flightreservation-flask-full/completeCheckIn`: Complete the check-in process.
+
+Refer to the Swagger documentation for detailed information about the required parameters for each endpoint.

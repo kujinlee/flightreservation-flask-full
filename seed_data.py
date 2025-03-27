@@ -1,23 +1,22 @@
+"""
+Script to seed the database with initial data for the Flight Reservation Flask Application.
+"""
+
+from sqlalchemy.exc import SQLAlchemyError  # Import specific SQLAlchemy exceptions
 from database import SessionLocal
-from sqlalchemy.sql import text  # Import text for executing raw SQL
+from utils.sql_utils import execute_sql_script  # Import the utility function
 
 def seed_data():
-    with SessionLocal().bind.connect() as connection:
-        transaction = connection.begin()  # Start a transaction
+    """
+    Seed the database with initial data.
+    """
+    with SessionLocal() as session:
         try:
-            with open("sql-scripts/2-data.sql", "r") as file:
-                sql_script = file.read()
-                # Split the script into individual statements
-                statements = sql_script.split(";")
-                for statement in statements:
-                    statement = statement.strip()
-                    if statement:  # Skip empty statements
-                        connection.execute(text(statement))  # Execute each statement
-            transaction.commit()  # Explicitly commit the transaction
-            print("SQL script executed successfully!")
-        except Exception as e:
-            transaction.rollback()  # Rollback the transaction in case of an error
-            print(f"Error executing SQL script: {e}")
+            execute_sql_script(session, "sql-scripts/2-seed.sql")  # Use utility function
+            session.commit()
+        except SQLAlchemyError as exc:  # Catch specific SQLAlchemy exceptions
+            session.rollback()
+            print(f"Error seeding data: {exc}")
 
 if __name__ == "__main__":
     seed_data()

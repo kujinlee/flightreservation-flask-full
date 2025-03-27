@@ -92,3 +92,6 @@ venv.bak/
 
 # Logs
 *.log
+
+# SSL/TLS certificates
+certs/
