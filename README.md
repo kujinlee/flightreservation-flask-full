@@ -37,9 +37,12 @@ This is a Flask implementation of the Flight Reservation System. It allows users
     ```plaintext
     BASE_URL=/flightreservation-flask-full
     DATABASE_URL=mysql+pymysql://<your user name>:<your password>@localhost:3306/<your database name>
+    FLASK_RUN_PORT=5001
     ```
 
     Replace `<your user name>`, `<your password>`, and `<your database name>` with your MySQL credentials and database name.
+
+    - **BASE_URL**: The base URL path for the application (e.g., `/flightreservation-flask-full`). Ensure this matches the prefix used in your routes and templates.
 
 5. **Set Up the Database**:
     - Create a MySQL database with the name specified in the `DATABASE_URL`.
@@ -74,7 +77,7 @@ This is a Flask implementation of the Flight Reservation System. It allows users
 
 8. **Access the Application**:
     Open your browser and navigate to:
-    [http://localhost:5000/flightreservation-flask-full/findFlights](http://localhost:5000/flightreservation-flask-full/findFlights)
+    [http://localhost:5001/flightreservation-flask-full/findFlights](http://localhost:5001/flightreservation-flask-full/findFlights)
 
     - This will take you to the first page of the application.
     - Ensure that the `BASE_URL` in your `.env` file is set to `/flightreservation-flask-full` for the application to work correctly.
@@ -196,6 +199,6 @@ This project uses **Swagger** (OpenAPI) to document and test the API endpoints.
 ### Notes
 - The application uses `BASE_URL` to prefix routes. Ensure your templates and links use the correct `BASE_URL` dynamically. For example:
   ```html
-  <p><a href="{{ base_url }}/findFlights">Search for Flights</a></p>
+  <p><a href="{{ BASE_URL }}/findFlights">Search for Flights</a></p>
   ```
-- For production, use a WSGI server like `gunicorn` instead of the Flask development server.
+- For production, ensure the `BASE_URL` is correctly set in the `.env` file to match the deployment path.
