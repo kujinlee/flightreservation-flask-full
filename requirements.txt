@@ -7,3 +7,5 @@ flask-sqlalchemy
 cryptography
 flask-swagger-ui
 requests
+pytest
+pytest-cov

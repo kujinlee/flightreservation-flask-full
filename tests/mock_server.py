@@ -2,18 +2,29 @@
 Mock server for testing the Flight Reservation Flask Application.
 """
 
+import os
+import logging
 from flask import Flask, request, render_template
 
-app = Flask(__name__)
+# Ensure the working directory is set to the project root
+os.chdir(os.path.dirname(os.path.abspath(__file__)) + "/..")
 
-# Configure the template folder
-app.template_folder = "templates"
+# Initialize the Flask app
+app = Flask(__name__, template_folder=os.path.join(os.getcwd(), "templates"))  # Set the correct template folder
+
+# Add debug logging
+logging.basicConfig(level=logging.DEBUG)
+logging.debug("Template folder set to: %s", app.template_folder)
+logging.debug("Absolute path to template folder: %s", os.path.abspath(app.template_folder))
+logging.debug("Current working directory: %s", os.getcwd())
+logging.debug("Template search path: %s", app.jinja_loader.searchpath)
 
 @app.route("/flightreservation-flask-full/findFlights", methods=["GET", "POST"])
 def find_flights():
     """
     Mock endpoint for finding flights.
     """
+    logging.debug("Received request for /findFlights with method: %s", request.method)
     if request.method == "GET":
         # Render the flight search form
         return render_template("findFlights.html")
@@ -22,6 +33,7 @@ def find_flights():
         "findFlightsResults.html",
         flights=[
             {
+                "id": 1,
                 "flight_number": "AA101",
                 "operating_airlines": "American Airlines",
                 "departure_city": "AUS",
@@ -31,6 +43,7 @@ def find_flights():
                 "price": 200.00,
             },
             {
+                "id": 2,
                 "flight_number": "UA202",
                 "operating_airlines": "United Airlines",
                 "departure_city": "AUS",
@@ -64,6 +77,8 @@ def create_reservation():
     """
     Mock endpoint for creating a reservation.
     """
+    if request.method != "POST":
+        return "Method Not Allowed", 405  # Return 405 for unsupported methods
     return render_template(
         "reservationConfirmation.html",
         reservation={"id": 1, "card_number": "**** **** **** 1234", "amount": 200.00},
@@ -97,6 +112,8 @@ def complete_check_in():
     """
     Mock endpoint for completing check-in.
     """
+    if request.method != "POST":
+        return "Method Not Allowed", 405  # Return 405 for unsupported methods
     return render_template(
         "finalDetails.html",
         reservation={
@@ -120,4 +137,5 @@ def complete_check_in():
     )
 
 if __name__ == "__main__":
+    logging.debug("Starting mock server...")
     app.run(debug=True, port=5002)

@@ -2,6 +2,6 @@
 Base declarative class for SQLAlchemy models.
 """
 
-from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import declarative_base  # Update import path for SQLAlchemy 2.0
 
 Base = declarative_base()

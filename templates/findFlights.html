@@ -1,20 +1,22 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Find Flights</title>
 </head>
 <body>
     <h1>Find Flights</h1>
-    <form action="{{ BASE_URL }}/findFlights" method="POST">
+    <form method="POST" action="{{ BASE_URL }}/findFlights">
         <label for="departure">Departure City:</label>
-        <input type="text" id="departure" name="departure" required>
-        <br>
+        <input type="text" id="departure" name="departure" required><br><br>
+
         <label for="arrival">Arrival City:</label>
-        <input type="text" id="arrival" name="arrival" required>
-        <br>
+        <input type="text" id="arrival" name="arrival" required><br><br>
+
         <label for="date_of_departure">Date of Departure:</label>
-        <input type="date" id="date_of_departure" name="date_of_departure" required>
-        <br>
+        <input type="date" id="date_of_departure" name="date_of_departure" required><br><br>
+
         <button type="submit">Search Flights</button>
     </form>
 </body>

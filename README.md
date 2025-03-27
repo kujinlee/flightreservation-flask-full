@@ -223,7 +223,7 @@ The `mock_server.py` is a standalone mock server that simulates the backend beha
        ```
        http://127.0.0.1:5002/flightreservation-flask-full/reserve
        ```
-     - **Create a Reservation**:
+     - **Create a Reservation** (POST method, cannot be tested in a browser):
        ```
        http://127.0.0.1:5002/flightreservation-flask-full/createReservation
        ```
@@ -231,21 +231,73 @@ The `mock_server.py` is a standalone mock server that simulates the backend beha
        ```
        http://127.0.0.1:5002/flightreservation-flask-full/checkIn
        ```
-     - **Complete Check-In**:
+     - **Complete Check-In** (POST method, cannot be tested in a browser):
        ```
        http://127.0.0.1:5002/flightreservation-flask-full/completeCheckIn
        ```
 
-3. **Test the Mock Endpoints**:
-   - Use Postman, cURL, or a browser to interact with the mock server. For example:
-     ```bash
-     curl -X GET http://127.0.0.1:5002/flightreservation-flask-full/findFlights
-     ```
+3. **Testing POST Endpoints**:
+   Since `POST` methods cannot be tested directly in a browser, use one of the following tools:
 
-### Notes
-- The mock server runs independently of the real Flask application.
-- It uses hardcoded responses and does not interact with a database.
-- Ensure the port (`5002`) does not conflict with other running services.
+   - **Using Postman**:
+     1. Open Postman and create a new request.
+     2. Set the method to `POST` and enter the endpoint URL. For example:
+        ```
+        http://127.0.0.1:5002/flightreservation-flask-full/createReservation
+        ```
+     3. Go to the **Body** tab and select **form-data** or **x-www-form-urlencoded**.
+     4. Add the required fields. For example:
+        ```
+        flight_id: 1
+        first_name: John
+        last_name: Doe
+        email: john.doe@example.com
+        phone: 1234567890
+        card_number: 4111111111111111
+        amount: 200.00
+        ```
+     5. Click **Send** to submit the request and view the response.
+
+   - **Using cURL**:
+     1. Open a terminal.
+     2. Use the following command to test a `POST` endpoint:
+        ```bash
+        curl -X POST http://127.0.0.1:5002/flightreservation-flask-full/createReservation \
+        -d "flight_id=1" \
+        -d "first_name=John" \
+        -d "last_name=Doe" \
+        -d "email=john.doe@example.com" \
+        -d "phone=1234567890" \
+        -d "card_number=4111111111111111" \
+        -d "amount=200.00"
+        ```
+     3. View the response in the terminal.
+
+   - **Using Python**:
+     1. Use the provided `test_post.py` script to test the `POST` endpoints.
+     2. Example script:
+        ```python
+        import requests
+
+        url = "http://127.0.0.1:5002/flightreservation-flask-full/createReservation"
+        data = {
+            "flight_id": 1,
+            "first_name": "John",
+            "last_name": "Doe",
+            "email": "john.doe@example.com",
+            "phone": "1234567890",
+            "card_number": "4111111111111111",
+            "amount": 200.00
+        }
+
+        response = requests.post(url, data=data)
+        print("Status Code:", response.status_code)
+        print("Response Body:", response.text)
+        ```
+     3. Save the script and run it:
+        ```bash
+        python test_post.py
+        ```
 
 ---
 
@@ -348,3 +400,58 @@ You can test the `POST` endpoints using the following methods:
 - `POST /flightreservation-flask-full/completeCheckIn`: Complete the check-in process.
 
 Refer to the Swagger documentation for detailed information about the required parameters for each endpoint.
+
+---
+
+## Running Tests
+
+The `tests` directory contains unit tests and integration tests for the application. These tests ensure the functionality of the application and its endpoints.
+
+### Prerequisites
+1. Ensure you have installed all dependencies:
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+2. Activate the virtual environment:
+   ```bash
+   source venv/bin/activate  # On Windows: venv\Scripts\activate
+   ```
+
+### Running Tests with `pytest`
+1. Navigate to the project root directory:
+   ```bash
+   cd /Users/kujinlee/code/copilotforjava/flightreservation-flask-full
+   ```
+
+2. Run all tests:
+   ```bash
+   pytest
+   ```
+
+3. Run a specific test file:
+   ```bash
+   pytest tests/test_routes.py
+   ```
+
+4. Run a specific test function:
+   ```bash
+   pytest tests/test_routes.py::test_find_flights
+   ```
+
+5. Generate a coverage report:
+   ```bash
+   pytest --cov=.
+   ```
+
+### Available Test Files
+- **`tests/test_routes.py`**: Contains unit tests for the application's routes.
+- **`tests/test_post.py`**: Contains a script to test the `POST` endpoints using the `requests` library.
+- **`tests/conftest.py`**: Provides shared fixtures for the tests, such as the Flask app instance and database session.
+
+### Notes
+- Ensure the mock server (`mock_server.py`) is running if you are testing endpoints that rely on it.
+- Use the `--disable-warnings` flag with `pytest` to suppress warnings:
+  ```bash
+  pytest --disable-warnings
+  ```
