@@ -26,5 +26,7 @@ services:
         condition: service_healthy
     env_file:
       - .env
+    environment:
+      IS_CONTAINER: "true"  # Indicate that the app is running inside a container
     volumes:
       - ./certs:/usr/src/app/certs # Mount the certs directory

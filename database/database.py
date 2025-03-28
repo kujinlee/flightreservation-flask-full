@@ -13,9 +13,21 @@ from utils.sql_utils import execute_sql_script  # Import the utility function
 # Load environment variables
 load_dotenv()
 
-# Get the database URL from the environment
-DATABASE_URL = os.getenv("DATABASE_URL")
-logging.info("MYLOG: DATABASE_URL: %s", DATABASE_URL)  # Use lazy % formatting
+# Determine if the app is running inside a container
+IS_CONTAINER = os.getenv("IS_CONTAINER", "false").lower() == "true"
+
+if IS_CONTAINER:
+    # Use container MySQL host and port
+    MYSQL_HOST = os.getenv("CONTAINER_MYSQL_HOST", "mysql")
+    MYSQL_PORT = os.getenv("CONTAINER_MYSQL_PORT", "3306")
+else:
+    # Use localhost MySQL host and port
+    MYSQL_HOST = os.getenv("LOCAL_MYSQL_HOST", "localhost")
+    MYSQL_PORT = os.getenv("LOCAL_MYSQL_PORT", "3306")
+
+# Construct the DATABASE_URL dynamically
+DATABASE_URL = f"mysql+pymysql://root:{os.getenv('DB_PASSWORD')}@{MYSQL_HOST}:{MYSQL_PORT}/{os.getenv('DB_NAME')}"
+logging.info("MYLOG: DATABASE_URL: %s", DATABASE_URL)
 
 # Ensure DATABASE_URL is not None
 if not DATABASE_URL:
