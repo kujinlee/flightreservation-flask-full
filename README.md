@@ -84,6 +84,70 @@ This is a Flask implementation of the Flight Reservation System. It allows users
 
 ---
 
+## Using Docker Containers
+
+This project supports running the application and MySQL database in Docker containers using Docker Compose.
+
+### Prerequisites
+- [Docker](https://www.docker.com/) installed on your system.
+- [Docker Compose](https://docs.docker.com/compose/) installed (if not included with Docker).
+
+### Steps to Run the Application with Docker
+
+1. **Build the Docker Images**:
+   ```bash
+   docker-compose build
+   ```
+
+2. **Start the Containers**:
+   ```bash
+   docker-compose up
+   ```
+   This will start the following services:
+   - **MySQL**: Runs on port `3307` (mapped to `3306` inside the container).
+   - **Flask Application**: Runs on port `5001`.
+
+3. **Access the Application**:
+   Open your browser and navigate to:
+   ```
+   http://localhost:5001/flightreservation-flask-full/findFlights
+   ```
+
+4. **Stop the Containers**:
+   To stop the running containers, use:
+   ```bash
+   docker-compose down
+   ```
+
+5. **Run Containers Separately**:
+   If you want to start only one service (e.g., MySQL), use:
+   ```bash
+   docker-compose up mysql
+   ```
+
+6. **View Logs**:
+   To view logs for a specific container, use:
+   ```bash
+   docker-compose logs <service_name>
+   ```
+   For example:
+   ```bash
+   docker-compose logs flightreservation-flask
+   ```
+
+7. **Rebuild Containers**:
+   If you make changes to the code or configuration, rebuild the containers:
+   ```bash
+   docker-compose build
+   ```
+
+### Notes
+- The MySQL container uses port `3307` on the host machine to avoid conflicts with any local MySQL instance running on port `3306`.
+- The Flask container connects to the MySQL container using the service name `mysql` and port `3306` internally.
+- Data for the MySQL container is persisted in the `mysql-data/` directory on the host machine.
+
+---
+
 ## Directory Descriptions
 
 ### **`certs/`**
