@@ -4,7 +4,7 @@ Mock server for testing the Flight Reservation Flask Application.
 
 import os
 import logging
-from flask import Flask, request, render_template
+from flask import Flask, request, render_template, jsonify
 
 # Ensure the working directory is set to the project root
 os.chdir(os.path.dirname(os.path.abspath(__file__)) + "/..")
@@ -19,41 +19,12 @@ logging.debug("Absolute path to template folder: %s", os.path.abspath(app.templa
 logging.debug("Current working directory: %s", os.getcwd())
 logging.debug("Template search path: %s", app.jinja_loader.searchpath)
 
-@app.route("/flightreservation-flask-full/findFlights", methods=["GET", "POST"])
+@app.route("/findFlights", methods=["GET"])
 def find_flights():
-    """
-    Mock endpoint for finding flights.
-    """
-    logging.debug("Received request for /findFlights with method: %s", request.method)
-    if request.method == "GET":
-        # Render the flight search form
-        return render_template("findFlights.html")
-    # Mock response for flight search results
-    return render_template(
-        "findFlightsResults.html",
-        flights=[
-            {
-                "id": 1,
-                "flight_number": "AA101",
-                "operating_airlines": "American Airlines",
-                "departure_city": "AUS",
-                "arrival_city": "NYC",
-                "date_of_departure": "2024-02-05",
-                "estimated_departure_time": "10:00 AM",
-                "price": 200.00,
-            },
-            {
-                "id": 2,
-                "flight_number": "UA202",
-                "operating_airlines": "United Airlines",
-                "departure_city": "AUS",
-                "arrival_city": "NYC",
-                "date_of_departure": "2024-02-05",
-                "estimated_departure_time": "12:00 PM",
-                "price": 250.00,
-            },
-        ],
-    )
+    return jsonify([
+        {"id": 1, "flight_number": "AA101", "departure_city": "AUS", "arrival_city": "NYC"},
+        {"id": 2, "flight_number": "UA202", "departure_city": "AUS", "arrival_city": "NYC"},
+    ])
 
 @app.route("/flightreservation-flask-full/reserve", methods=["GET"])
 def reserve():
@@ -135,6 +106,17 @@ def complete_check_in():
             },
         },
     )
+
+@app.route('/api/payment', methods=['POST'])
+def mock_payment():
+    """
+    Mock endpoint for simulating payment processing.
+    """
+    data = request.json
+    if data.get('cardNumber') == '4111111111111111':
+        return jsonify({"status": "success", "transactionId": "12345"}), 200
+    else:
+        return jsonify({"status": "failure", "error": "Invalid card number"}), 400
 
 if __name__ == "__main__":
     logging.debug("Starting mock server...")

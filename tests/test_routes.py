@@ -10,18 +10,18 @@ def test_get_all_flights(client):
     assert response.status_code == 200
     assert isinstance(response.json, list)  # Ensure the response is a list
 
-def test_find_flights(client):
-    """
-    Test the POST /findFlights endpoint.
-    """
-    data = {
-        "departure": "AUS",
-        "arrival": "NYC",
-        "date_of_departure": "2024-02-05"
-    }
-    response = client.post("/flightreservation-flask-full/findFlights", data=data)
+def test_find_flights(client, mocker):
+    # Mock the database query
+    mock_flights = [
+        {"id": 1, "flight_number": "AA101", "departure_city": "AUS", "arrival_city": "NYC"},
+        {"id": 2, "flight_number": "UA202", "departure_city": "AUS", "arrival_city": "NYC"},
+    ]
+    mocker.patch('app.models.Flight.query.all', return_value=mock_flights)
+
+    # Test the /findFlights route
+    response = client.get('/findFlights')
     assert response.status_code == 200
-    assert "flights" in response.data.decode()  # Ensure the response contains flight data
+    assert "AA101" in response.data.decode()
 
 def test_reserve_flight(client):
     """

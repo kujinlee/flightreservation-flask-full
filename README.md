@@ -1,6 +1,8 @@
 # Flight Reservation Flask Application
 
-This is a Flask implementation of the Flight Reservation System. It allows users to search for flights, complete reservations, and check-in for flights.
+## Overview
+
+This project is a Flask-based flight reservation system that allows users to search for flights, make reservations, and complete check-ins. It includes a set of unit and integration tests to ensure the reliability of the application.
 
 ---
 
@@ -264,104 +266,47 @@ The Flight Reservation Flask Application provides two tools for testing and deve
 
 ---
 
-## Using the Mock Server
+## Testing
 
-The `mock_server.py` is a standalone mock server that simulates the backend behavior with hardcoded responses. It is useful for frontend development or prototyping when the real backend is unavailable.
+### Unit and Integration Tests
 
-### Steps to Use the Mock Server
+The tests for this application are located in the `tests` directory and are designed to validate the functionality of the application. These tests include:
 
-1. **Start the Mock Server**:
-   - Run the `mock_server.py` script:
-     ```bash
-     python /Users/kujinlee/code/copilotforjava/flightreservation-flask-full/tests/mock_server.py
-     ```
-   - By default, the mock server runs on port `5002`.
+- **Route Tests**: Directly test the Flask application's routes using Flask's built-in test client.
+- **Model Tests**: Validate the behavior of database models.
+- **Middleware Tests**: Ensure proper handling of errors and middleware logic.
 
-2. **Access the Mock Endpoints**:
-   - Open your browser or use tools like Postman or cURL to test the mock endpoints. For example:
-     - **Search for Flights**:
-       ```
-       http://127.0.0.1:5002/flightreservation-flask-full/findFlights
-       ```
-     - **Reserve a Flight**:
-       ```
-       http://127.0.0.1:5002/flightreservation-flask-full/reserve
-       ```
-     - **Create a Reservation** (POST method, cannot be tested in a browser):
-       ```
-       http://127.0.0.1:5002/flightreservation-flask-full/createReservation
-       ```
-     - **Check-In**:
-       ```
-       http://127.0.0.1:5002/flightreservation-flask-full/checkIn
-       ```
-     - **Complete Check-In** (POST method, cannot be tested in a browser):
-       ```
-       http://127.0.0.1:5002/flightreservation-flask-full/completeCheckIn
-       ```
+### How `mock_server.py` Is Used
 
-3. **Testing POST Endpoints**:
-   Since `POST` methods cannot be tested directly in a browser, use one of the following tools:
+The `mock_server.py` file provides a mock implementation of the application endpoints. It is used to simulate the behavior of the application in a controlled environment. This is particularly useful for:
 
-   - **Using Postman**:
-     1. Open Postman and create a new request.
-     2. Set the method to `POST` and enter the endpoint URL. For example:
-        ```
-        http://127.0.0.1:5002/flightreservation-flask-full/createReservation
-        ```
-     3. Go to the **Body** tab and select **form-data** or **x-www-form-urlencoded**.
-     4. Add the required fields. For example:
-        ```
-        flight_id: 1
-        first_name: John
-        last_name: Doe
-        email: john.doe@example.com
-        phone: 1234567890
-        card_number: 4111111111111111
-        amount: 200.00
-        ```
-     5. Click **Send** to submit the request and view the response.
+1. **Simulating the Application**:
+   - The `mock_server.py` file allows external clients or integration tests to interact with predefined mock endpoints instead of the actual application logic.
 
-   - **Using cURL**:
-     1. Open a terminal.
-     2. Use the following command to test a `POST` endpoint:
-        ```bash
-        curl -X POST http://127.0.0.1:5002/flightreservation-flask-full/createReservation \
-        -d "flight_id=1" \
-        -d "first_name=John" \
-        -d "last_name=Doe" \
-        -d "email=john.doe@example.com" \
-        -d "phone=1234567890" \
-        -d "card_number=4111111111111111" \
-        -d "amount=200.00"
-        ```
-     3. View the response in the terminal.
+2. **Testing External Clients**:
+   - It is typically used in tests that simulate external clients interacting with the application, such as API tests or integration tests.
 
-   - **Using Python**:
-     1. Use the provided `test_post.py` script to test the `POST` endpoints.
-     2. Example script:
-        ```python
-        import requests
+### Important Note
 
-        url = "http://127.0.0.1:5002/flightreservation-flask-full/createReservation"
-        data = {
-            "flight_id": 1,
-            "first_name": "John",
-            "last_name": "Doe",
-            "email": "john.doe@example.com",
-            "phone": "1234567890",
-            "card_number": "4111111111111111",
-            "amount": 200.00
-        }
+The majority of the tests in this project (e.g., `test_routes.py`, `test_models.py`) do not rely on `mock_server.py`. Instead, they directly test the Flask application using Flask's test client and mock specific dependencies as needed. The `mock_server.py` is primarily intended for external client testing and is not required for the core unit and integration tests.
 
-        response = requests.post(url, data=data)
-        print("Status Code:", response.status_code)
-        print("Response Body:", response.text)
-        ```
-     3. Save the script and run it:
-        ```bash
-        python test_post.py
-        ```
+---
+
+## Running the Tests
+
+To run the tests, use the following command:
+
+```bash
+pytest
+```
+
+If you want to use the `mock_server.py` for external client testing, start the mock server first:
+
+```bash
+python tests/mock_server.py
+```
+
+Then, point your client or integration tests to the mock server's URL (e.g., `http://localhost:5002`).
 
 ---
 
